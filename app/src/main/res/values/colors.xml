@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+<!-- Colores principales de la aplicación -->
+<color name="colorPrimary">#4ECDC4</color>
+<color name="colorPrimaryDark">#2BB7AD</color>
+<color name="colorAccent">#FF6B6B</color>
+
+<!-- Colores para el gradiente del splash -->
+<color name="gradient_start">#FF9FF3</color>
+<color name="gradient_end">#74B9FF</color>
+
+<!-- Colores de las formas -->
+<color name="circle_color">#FF6B6B</color>
+<color name="square_color">#4ECDC4</color>
+<color name="triangle_color">#FFD93D</color>
+
+<!-- Colores de texto -->
+<color name="text_primary">#FFFFFF</color>
+<color name="text_secondary">#CCFFFFFF</color>
+<color name="text_shadow">#FF6B6B</color>
+
+<!-- Colores adicionales para la app -->
+<color name="background_light">#F5F5F5</color>
+<color name="background_white">#FFFFFF</color>
+<color name="text_dark">#333333</color>
+<color name="text_gray">#666666</color>
+
+<!-- Colores para botones y elementos interactivos -->
+<color name="button_primary">#4ECDC4</color>
+<color name="button_secondary">#FF6B6B</color>
+<color name="button_disabled">#CCCCCC</color>
+
+    <!-- Colores del menú -->
+    <color name="navigation_icon_color">#FF6B6B</color>
+    <color name="navigation_text_color">#333333</color>
+    <color name="navigation_selected_color">#4ECDC4</color>
+</resources>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    android:orientation="vertical"
+    android:background="@drawable/menu_header_gradient"
+    android:padding="1dp"
+    android:gravity="center"
+    android:contentDescription="Encabezado del menú - Sonríe y Aprende">
+
+    <!-- Logo shapes animado EXACTO -->
+
+    <!-- Títulos  -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginBottom="0dp"
+        android:contentDescription="Formas decorativas animadas"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <!-- Círculo rojo -->
+        <View
+            android:id="@+id/headerShape1"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/shape_circle_red"
+            android:contentDescription="Círculo rojo" />
+
+        <!-- Cuadrado cyan -->
+        <View
+            android:id="@+id/headerShape2"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/shape_square_cyan"
+            android:contentDescription="Cuadrado cyan" />
+
+        <!-- Triángulo amarillo -->
+        <ImageView
+            android:id="@+id/headerShape3"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:contentDescription="Triángulo amarillo"
+            android:src="@drawable/shape_triangle_yellow" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginBottom="0dp"
+        android:contentDescription="Sonríe y Aprende"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:text="MENU"
+        android:textColor="@android:color/white"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+
+</LinearLayout>

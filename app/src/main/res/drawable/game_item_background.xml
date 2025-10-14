@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Estado normal - colores pastel alternados -->
+    <item android:state_pressed="false" android:state_selected="false">
+        <shape android:shape="rectangle">
+            <solid android:color="#F0F8FF" />
+            <stroke android:width="2dp" android:color="#87CEEB" />
+            <corners android:radius="16dp" />
+        </shape>
+    </item>
+
+    <!-- Estado pressed - efecto hover -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#E6F3FF" />
+            <stroke android:width="2dp" android:color="#FFD93D" />
+            <corners android:radius="16dp" />
+        </shape>
+    </item>
+</selector>

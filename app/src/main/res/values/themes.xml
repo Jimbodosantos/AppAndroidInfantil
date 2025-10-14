@@ -1,0 +1,24 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.SonrieAprende" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="Theme.SplashTheme" parent="Theme.SonrieAprende">
+        <item name="android:windowBackground">@drawable/gradient_background</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="Widget.SonrieAprende.NavigationView" parent="Widget.Material3.NavigationView">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="itemShapeAppearance">@style/ShapeAppearance.SonrieAprende.MenuItem</item>
+    </style>
+
+    <style name="ShapeAppearance.SonrieAprende.MenuItem" parent="ShapeAppearance.Material3.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
+    </style>
+</resources>

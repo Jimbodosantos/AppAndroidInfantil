@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Categoría: Aprendizaje Básico -->
+    <item
+        android:id="@+id/category_learning"
+        android:title="Aprendizaje Básico"
+        android:enabled="false"
+        app:actionLayout="@layout/menu_category" />
+
+    <item
+        android:id="@+id/menu_abc"
+        android:title="Abecedario Mágico"
+        app:actionLayout="@layout/menu_item" />
+
+    <item
+        android:id="@+id/menu_numbers"
+        android:title="Números Locos"
+        app:actionLayout="@layout/menu_item" />
+
+    <item
+        android:id="@+id/menu_colors"
+        android:title="Mundo de Colores"
+        app:actionLayout="@layout/menu_item" />
+
+    <item
+        android:id="@+id/menu_shapes"
+        android:title="Formas Divertidas"
+        app:actionLayout="@layout/menu_item" />
+
+    <!-- Categoría: Animales Divertidos -->
+    <item
+        android:id="@+id/category_animals"
+        android:title="Animales Divertidos"
+        android:enabled="false"
+        app:actionLayout="@layout/menu_category" />
+
+    <item
+        android:id="@+id/menu_farm"
+        android:title="Granja Sonora"
+        app:actionLayout="@layout/menu_item" />
+
+    <item
+        android:id="@+id/menu_ocean"
+        android:title="Océano Mágico"
+        app:actionLayout="@layout/menu_item" />
+
+    <item
+        android:id="@+id/menu_jungle"
+        android:title="Selva ABC"
+        app:actionLayout="@layout/menu_item" />
+
+    <!-- Categoría: Creatividad -->
+    <item
+        android:id="@+id/category_creativity"
+        android:title="Creatividad"
+        android:enabled="false"
+        app:actionLayout="@layout/menu_category" />
+
+    <item
+        android:id="@+id/menu_music"
+        android:title="Música Alegre"
+        app:actionLayout="@layout/menu_item" />
+
+    <item
+        android:id="@+id/menu_paint"
+        android:title="Pintura Mágica"
+        app:actionLayout="@layout/menu_item" />
+
+</menu>
