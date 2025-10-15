@@ -1,5 +1,8 @@
 package com.example.sonrieaprende
 
+import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -24,38 +27,29 @@ class MainActivity : AppCompatActivity() {
     private lateinit var introSquare: ImageView
     private lateinit var introTriangle: ImageView
 
-    // Datos para los juegos destacados
+    // Datos para los juegos destacados - SOLO CONTAR ANIMALES
     private val featuredGames = listOf(
-        GameItem("🔤", "Abecedario", "Abecedario Mágico"),
-        GameItem("🔢", "Números", "Números Locos"),
-        GameItem("🎨", "Colores", "Mundo de Colores"),
-        GameItem("🔷", "Formas", "Formas Divertidas")
+        GameItem("🐮", "Granja Mágica", "Contar Animales")
     )
 
-    // Datos EXACTOS para el menú lateral
+    // Datos EXACTOS para el menú lateral - SOLO CONTAR ANIMALES
     private val menuCategories = listOf(
-        MenuCategory(
-            "📚 Aprendizaje Básico",
-            listOf(
-                MenuItemData("🔤", "Abecedario Mágico", "2-4 años"),
-                MenuItemData("🔢", "Números Locos", "3-5 años"),
-                MenuItemData("🎨", "Mundo de Colores", "2-4 años"),
-                MenuItemData("🔷", "Formas Divertidas", "3-5 años")
-            )
-        ),
         MenuCategory(
             "🐾 Animales Divertidos",
             listOf(
-                MenuItemData("🐮", "Granja Sonora", "2-4 años"),
-                MenuItemData("🐠", "Océano Mágico", "3-5 años"),
-                MenuItemData("🐒", "Selva ABC", "3-5 años")
+                MenuItemData("🐮", "Granja Mágica", "3-6 años")
             )
         ),
         MenuCategory(
-            "🎵 Creatividad",
+            "🔢 Matemáticas Básicas",
             listOf(
-                MenuItemData("🎹", "Música Alegre", "3-6 años"),
-                MenuItemData("🖌️", "Pintura Mágica", "3-6 años")
+                MenuItemData("🐮", "Contar Animales", "3-6 años")
+            )
+        ),
+        MenuCategory(
+            "🎮 Juegos Destacados",
+            listOf(
+                MenuItemData("🐮", "Granja Mágica", "3-6 años")
             )
         )
     )
@@ -218,12 +212,8 @@ class MainActivity : AppCompatActivity() {
                 itemView.findViewById<TextView>(R.id.itemAge).text = itemData.ageRange
                 itemView.contentDescription = "${itemData.title} - Para ${itemData.ageRange}"
 
-                // Configurar colores alternados
-                val backgroundDrawable = if (itemIndex % 2 == 0) {
-                    resources.getDrawable(R.drawable.menu_item_odd, null)
-                } else {
-                    resources.getDrawable(R.drawable.menu_item_even, null)
-                }
+                // Configurar colores alternados programáticamente
+                val backgroundDrawable = createMenuItemBackground(itemIndex)
                 itemView.findViewById<LinearLayout>(R.id.menuItemLayout).background = backgroundDrawable
 
                 // Configurar animaciones y clics
@@ -242,10 +232,25 @@ class MainActivity : AppCompatActivity() {
                 val space = View(this)
                 space.layoutParams = LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
-                    resources.getDimensionPixelSize(R.dimen.menu_category_spacing)
+                    20.dpToPx() // 20dp de espacio
                 )
                 space.contentDescription = "Espacio entre categorías"
                 menuContainer.addView(space)
+            }
+        }
+    }
+
+    private fun createMenuItemBackground(itemIndex: Int): GradientDrawable {
+        return GradientDrawable().apply {
+            cornerRadius = 15f
+            if (itemIndex % 2 == 0) {
+                // Color rosa para items pares
+                setColor(Color.parseColor("#FFF0F5"))
+                setStroke(2.dpToPx(), Color.parseColor("#FFB6C1"))
+            } else {
+                // Color verde para items impares
+                setColor(Color.parseColor("#F0FFF0"))
+                setStroke(2.dpToPx(), Color.parseColor("#98FB98"))
             }
         }
     }
@@ -306,15 +311,31 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showConfettiEffectExact() {
-        Toast.makeText(this, "🎮 ¡Iniciando juego!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "🎮 ¡Iniciando Granja Mágica!", Toast.LENGTH_SHORT).show()
     }
 
     private fun startGame(gameName: String) {
-        Toast.makeText(this, "🎮 Iniciando: $gameName", Toast.LENGTH_SHORT).show()
+        when (gameName) {
+            "Granja Mágica", "Contar Animales" -> {
+                // Iniciar el juego Contar Animales
+                val intent = Intent(this, ContarAnimales::class.java)
+                startActivity(intent)
+            }
+            else -> {
+                Toast.makeText(this, "🎮 Iniciando: $gameName", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun startChallenge() {
-        Toast.makeText(this, "🏆 ¡Comenzando el Reto del Día!\nEncuentra 5 animales que empiecen con 'A'", Toast.LENGTH_LONG).show()
+        // El reto del día ahora es contar animales
+        Toast.makeText(this, "🏆 ¡Reto del Día!\nCuenta 10 animales correctamente", Toast.LENGTH_LONG).show()
+
+        // Opcional: Iniciar directamente el juego de contar animales
+        Handler(Looper.getMainLooper()).postDelayed({
+            val intent = Intent(this, ContarAnimales::class.java)
+            startActivity(intent)
+        }, 2000)
     }
 
     // Data classes
@@ -335,4 +356,7 @@ class MainActivity : AppCompatActivity() {
         val title: String,
         val items: List<MenuItemData>
     )
+
+    // Extensión para convertir dp a px
+    private fun Int.dpToPx(): Int = (this * resources.displayMetrics.density).toInt()
 }
