@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cardLayout"
+    android:layout_width="85dp"
+    android:layout_height="85dp"
+    android:orientation="horizontal"
+    android:gravity="end|center_vertical"
+    android:background="@drawable/card_background"
+    android:padding="10dp"
+    android:layout_marginTop="5dp"
+    android:layout_margin="60dp">
+
+    <!-- Contenedor para las cartas superpuestas -->
+    <FrameLayout
+        android:layout_width="65dp"
+        android:layout_height="65dp">
+
+        <!-- Frente de la carta (pregunta) -->
+        <TextView
+            android:id="@+id/cardFront"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/card_front_background"
+            android:gravity="center"
+            android:text="¿?"
+            android:textColor="#333333"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+        <!-- Reverso de la carta (color) -->
+        <TextView
+            android:id="@+id/cardBack"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="🔴"
+            android:textColor="@android:color/white"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:visibility="invisible" />
+
+    </FrameLayout>
+
+</LinearLayout>

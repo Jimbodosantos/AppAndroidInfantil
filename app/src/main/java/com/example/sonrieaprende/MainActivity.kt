@@ -27,12 +27,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var introSquare: ImageView
     private lateinit var introTriangle: ImageView
 
-    // Datos para los juegos destacados - SOLO CONTAR ANIMALES
+    // Datos para los juegos destacados - AHORA CON MÁS JUEGOS
     private val featuredGames = listOf(
-        GameItem("🐮", "Granja Mágica", "Contar Animales")
+        GameItem("🐮", "Granja Mágica", "Contar Animales"),
+        GameItem("\uD83D\uDD2E", "Memorama", "Memorama de Colores")
     )
 
-    // Datos EXACTOS para el menú lateral - SOLO CONTAR ANIMALES
+    // Datos ACTUALIZADOS para el menú lateral
     private val menuCategories = listOf(
         MenuCategory(
             "🐾 Animales Divertidos",
@@ -41,15 +42,22 @@ class MainActivity : AppCompatActivity() {
             )
         ),
         MenuCategory(
+            "🎨 Juegos de Memoria",
+            listOf(
+                MenuItemData("\uD83D\uDD2E", "Memorama", "4-8 años")
+            )
+        ),
+        MenuCategory(
             "🔢 Matemáticas Básicas",
             listOf(
-                MenuItemData("🐮", "Contar Animales", "3-6 años")
+                MenuItemData("🐮", "Granja Animales", "3-6 años")
             )
         ),
         MenuCategory(
             "🎮 Juegos Destacados",
             listOf(
-                MenuItemData("🐮", "Granja Mágica", "3-6 años")
+                MenuItemData("🐮", "Granja Mágica", "3-6 años"),
+                MenuItemData("\uD83D\uDD2E", "Memorama", "4-8 años")
             )
         )
     )
@@ -243,14 +251,18 @@ class MainActivity : AppCompatActivity() {
     private fun createMenuItemBackground(itemIndex: Int): GradientDrawable {
         return GradientDrawable().apply {
             cornerRadius = 15f
-            if (itemIndex % 2 == 0) {
-                // Color rosa para items pares
+            if (itemIndex % 3 == 0) {
+                // Color rosa para items
                 setColor(Color.parseColor("#FFF0F5"))
                 setStroke(2.dpToPx(), Color.parseColor("#FFB6C1"))
-            } else {
-                // Color verde para items impares
+            } else if (itemIndex % 3 == 1) {
+                // Color verde para items
                 setColor(Color.parseColor("#F0FFF0"))
                 setStroke(2.dpToPx(), Color.parseColor("#98FB98"))
+            } else {
+                // Color azul claro para items
+                setColor(Color.parseColor("#F0F8FF"))
+                setStroke(2.dpToPx(), Color.parseColor("#87CEEB"))
             }
         }
     }
@@ -311,7 +323,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showConfettiEffectExact() {
-        Toast.makeText(this, "🎮 ¡Iniciando Granja Mágica!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "🎮 ¡Iniciando juego!", Toast.LENGTH_SHORT).show()
     }
 
     private fun startGame(gameName: String) {
@@ -321,6 +333,11 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this, ContarAnimales::class.java)
                 startActivity(intent)
             }
+            "Memorama de Colores" -> {
+                // Iniciar el juego Memorama de Colores
+                val intent = Intent(this, MemoramaColores::class.java)
+                startActivity(intent)
+            }
             else -> {
                 Toast.makeText(this, "🎮 Iniciando: $gameName", Toast.LENGTH_SHORT).show()
             }
@@ -328,14 +345,25 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startChallenge() {
-        // El reto del día ahora es contar animales
-        Toast.makeText(this, "🏆 ¡Reto del Día!\nCuenta 10 animales correctamente", Toast.LENGTH_LONG).show()
+        // Reto del día aleatorio entre los dos juegos
+        val randomGame = listOf("Granja Mágica", "Memorama de Colores").random()
 
-        // Opcional: Iniciar directamente el juego de contar animales
-        Handler(Looper.getMainLooper()).postDelayed({
-            val intent = Intent(this, ContarAnimales::class.java)
-            startActivity(intent)
-        }, 2000)
+        when (randomGame) {
+            "Granja Mágica" -> {
+                Toast.makeText(this, "🏆 ¡Reto del Día!\nCuenta 10 animales correctamente", Toast.LENGTH_LONG).show()
+                Handler(Looper.getMainLooper()).postDelayed({
+                    val intent = Intent(this, ContarAnimales::class.java)
+                    startActivity(intent)
+                }, 2000)
+            }
+            "Memorama de Colores" -> {
+                Toast.makeText(this, "🏆 ¡Reto del Día!\nEncuentra 5 parejas de colores", Toast.LENGTH_LONG).show()
+                Handler(Looper.getMainLooper()).postDelayed({
+                    val intent = Intent(this, MemoramaColores::class.java)
+                    startActivity(intent)
+                }, 2000)
+            }
+        }
     }
 
     // Data classes

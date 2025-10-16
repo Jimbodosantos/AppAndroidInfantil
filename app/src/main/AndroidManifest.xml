@@ -36,6 +36,11 @@
             android:enableOnBackInvokedCallback="true"
             android:exported="true" />
 
+        <activity
+            android:name=".MemoramaColores"
+            android:enableOnBackInvokedCallback="true"
+            android:exported="true" />
+
     </application>
 
 </manifest>
