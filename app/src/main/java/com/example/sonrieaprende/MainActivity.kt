@@ -27,13 +27,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var introSquare: ImageView
     private lateinit var introTriangle: ImageView
 
-    // Datos para los juegos destacados - AHORA CON MÁS JUEGOS
+    // Datos para los juegos destacados
     private val featuredGames = listOf(
+        GameItem("🔺", "Formas", "Formas Divertidas"),
         GameItem("🐮", "Granja Mágica", "Contar Animales"),
-        GameItem("\uD83D\uDD2E", "Memorama", "Memorama de Colores")
+        GameItem("🎴", "Memorama", "Memorama de Colores")
+
     )
 
-    // Datos ACTUALIZADOS para el menú lateral
+    // Datos  para el menú lateral
     private val menuCategories = listOf(
         MenuCategory(
             "🐾 Animales Divertidos",
@@ -44,7 +46,13 @@ class MainActivity : AppCompatActivity() {
         MenuCategory(
             "🎨 Juegos de Memoria",
             listOf(
-                MenuItemData("\uD83D\uDD2E", "Memorama", "4-8 años")
+                MenuItemData("🎴", "Memorama", "4-8 años")
+            )
+        ),
+        MenuCategory(
+            "🔺 Formas y Colores",
+            listOf(
+                MenuItemData("🔺", "Formas Divertidas", "3-5 años")
             )
         ),
         MenuCategory(
@@ -57,7 +65,8 @@ class MainActivity : AppCompatActivity() {
             "🎮 Juegos Destacados",
             listOf(
                 MenuItemData("🐮", "Granja Mágica", "3-6 años"),
-                MenuItemData("\uD83D\uDD2E", "Memorama", "4-8 años")
+                MenuItemData("🎴", "Memorama", "4-8 años"),
+                MenuItemData("🔺", "Formas Divertidas", "3-5 años")
             )
         )
     )
@@ -81,10 +90,10 @@ class MainActivity : AppCompatActivity() {
         // Configurar listeners
         setupListeners()
 
-        // Configurar menú lateral EXACTO
+        // Configurar menú lateral
         setupNavigationMenuExact()
 
-        // Configurar animaciones del menú EXACTO
+        // Configurar animaciones del menú
         setupMenuAnimationsExact()
     }
 
@@ -130,7 +139,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupMenuAnimationsExact() {
         val floatAnimation = AnimationUtils.loadAnimation(this, R.anim.floatt)
 
-        // Animación para las formas del header del menú EXACTO
+        // Animación para las formas del header del menú
         findViewById<View>(R.id.headerShape1)?.startAnimation(floatAnimation)
         Handler(Looper.getMainLooper()).postDelayed({
             findViewById<View>(R.id.headerShape2)?.startAnimation(floatAnimation)
@@ -333,9 +342,14 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this, ContarAnimales::class.java)
                 startActivity(intent)
             }
-            "Memorama de Colores" -> {
+            "Memorama de Colores", "Memorama" -> {
                 // Iniciar el juego Memorama de Colores
                 val intent = Intent(this, MemoramaColores::class.java)
+                startActivity(intent)
+            }
+            "Formas Divertidas", "Formas" -> {
+                // Iniciar el juego Formas Divertidas
+                val intent = Intent(this, ShapesGameActivity::class.java)
                 startActivity(intent)
             }
             else -> {
@@ -345,8 +359,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startChallenge() {
-        // Reto del día aleatorio entre los dos juegos
-        val randomGame = listOf("Granja Mágica", "Memorama de Colores").random()
+        // Reto del día aleatorio entre los tres juegos
+        val randomGame = listOf("Granja Mágica", "Memorama de Colores", "Formas Divertidas").random()
 
         when (randomGame) {
             "Granja Mágica" -> {
@@ -360,6 +374,13 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "🏆 ¡Reto del Día!\nEncuentra 5 parejas de colores", Toast.LENGTH_LONG).show()
                 Handler(Looper.getMainLooper()).postDelayed({
                     val intent = Intent(this, MemoramaColores::class.java)
+                    startActivity(intent)
+                }, 2000)
+            }
+            "Formas Divertidas" -> {
+                Toast.makeText(this, "🏆 ¡Reto del Día!\nIdentifica 8 formas correctamente", Toast.LENGTH_LONG).show()
+                Handler(Looper.getMainLooper()).postDelayed({
+                    val intent = Intent(this, ShapesGameActivity::class.java)
                     startActivity(intent)
                 }, 2000)
             }

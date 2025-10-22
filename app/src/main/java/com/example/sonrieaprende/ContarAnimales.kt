@@ -183,7 +183,7 @@ class ContarAnimales : AppCompatActivity() {
         // Configurar teclado numérico
         setupNumberPad(animalCount)
 
-        updateProgress()
+
     }
 
     private fun setupAnimalsGrid(animalList: List<Animal>) {
@@ -275,6 +275,7 @@ class ContarAnimales : AppCompatActivity() {
             button.setBackgroundColor(Color.parseColor("#4ECDC4"))
             showCorrectDialog()
             createConfettiEffect()
+            updateProgress()
         } else {
             // Respuesta incorrecta
             lives--
@@ -360,8 +361,11 @@ class ContarAnimales : AppCompatActivity() {
             .setPositiveButton("¡Siguiente!") { dialog, _ ->
                 dialog.dismiss()
             }
+
             .setCancelable(false)
             .show()
+            updateProgress()
+
     }
 
     private fun showIncorrectDialog() {
@@ -382,6 +386,7 @@ class ContarAnimales : AppCompatActivity() {
             .setPositiveButton("Jugar otra vez") { dialog, _ ->
                 dialog.dismiss()
                 startNewGame()
+                updateProgress()
             }
             .setNegativeButton("Salir") { dialog, _ ->
                 dialog.dismiss()
@@ -390,6 +395,7 @@ class ContarAnimales : AppCompatActivity() {
             }
             .setCancelable(false)
             .show()
+
     }
 
     private fun showRoundCompleteDialog() {
@@ -400,6 +406,8 @@ class ContarAnimales : AppCompatActivity() {
                 dialog.dismiss()
                 currentQuestion = 1
                 generateQuestion()
+                updateProgress()
+
             }
             .setNegativeButton("Salir") { dialog, _ ->
                 dialog.dismiss()

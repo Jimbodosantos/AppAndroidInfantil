@@ -33,6 +33,12 @@
 <color name="button_secondary">#FF6B6B</color>
 <color name="button_disabled">#CCCCCC</color>
 
+    <color name="correct_color">#4ECDC4</color>
+    <color name="incorrect_color">#FF6B6B</color>
+    <color name="card_background">#FFFFFF</color>
+    <color name="text_primary2">#333333</color>
+    <color name="text_secondary2">#666666</color>
+
 <!-- Colores del menú -->
     <color name="navigation_icon_color">#FF6B6B</color>
     <color name="navigation_text_color">#333333</color>

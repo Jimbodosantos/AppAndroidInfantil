@@ -41,6 +41,11 @@
             android:enableOnBackInvokedCallback="true"
             android:exported="true" />
 
+        <activity
+            android:name=".ShapesGameActivity"
+            android:enableOnBackInvokedCallback="true"
+            android:exported="true" />
+
     </application>
 
 </manifest>
