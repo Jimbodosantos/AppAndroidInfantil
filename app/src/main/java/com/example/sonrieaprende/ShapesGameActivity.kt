@@ -36,14 +36,23 @@ class ShapesGameActivity : AppCompatActivity() {
 
     // Datos de las formas
     private val shapes = listOf(
-        Shape("círculo", "⭕", listOf("círculo", "redonda", "bola")),
-        Shape("cuadrado", "⬜", listOf("cuadrado", "cuadrada", "caja")),
-        Shape("triángulo", "🔺", listOf("triángulo", "triangular", "pirámide")),
-        Shape("rectángulo", "📏", listOf("rectángulo", "rectangular", "tabla")),
-        Shape("estrella", "⭐", listOf("estrella", "estrellada", "brillante")),
-        Shape("corazón", "❤️", listOf("corazón", "amor", "corazoncito")),
-        Shape("rombo", "💠", listOf("rombo", "diamante", "rombito")),
-        Shape("óvalo", "🥚", listOf("óvalo", "ovalada", "huevo"))
+        Shape("círculo", "⭕", listOf("círculo", "redonda", "bola", "rueda")),
+        Shape("cuadrado", "⬜", listOf("cuadrado", "cuadrada", "caja", "bloque")),
+        Shape("triángulo", "🔺", listOf("triángulo", "triangular", "pirámide", "tejado")),
+        Shape("rectángulo", "📏", listOf("rectángulo", "rectangular", "tabla", "puerta")),
+        Shape("estrella", "⭐", listOf("estrella", "estrellada", "brillante", "lucero")),
+        Shape("corazón", "❤️", listOf("corazón", "amor", "corazoncito", "amoroso")),
+        Shape("rombo", "💠", listOf("rombo", "diamante", "rombito", "cometa")),
+        Shape("óvalo", "🥚", listOf("óvalo", "ovalada", "huevo", "elipse")),
+        Shape("pentágono", "⬟", listOf("pentágono", "cinco lados", "casa", "forma de casa")),
+        Shape("hexágono", "⬢", listOf("hexágono", "seis lados", "panal", "colmena")),
+        Shape("octágono", "🛑", listOf("octágono", "ocho lados", "señal", "stop")),
+        Shape("crescente", "🌙", listOf("luna", "creciente", "media luna", "nocturna")),
+        Shape("espiral", "🌀", listOf("espiral", "caracol", "remolino", "torbellino")),
+        Shape("cruz", "➕", listOf("cruz", "cruce", "más", "intersección")),
+        Shape("flecha", "➡️", listOf("flecha", "punta", "dirección", "señal")),
+        Shape("campana", "🔔", listOf("campana", "sonido", "timbre", "llamada")),
+
     )
 
     data class Shape(

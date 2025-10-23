@@ -30,15 +30,16 @@ class MainActivity : AppCompatActivity() {
     // Datos para los juegos destacados
     private val featuredGames = listOf(
         GameItem("🔺", "Formas", "Formas Divertidas"),
-        GameItem("🐮", "Granja Mágica", "Contar Animales"),
-        GameItem("🎴", "Memorama", "Memorama de Colores")
-
+        GameItem("🐮", "Contar Animales", "Contar Animales"),
+        GameItem("\uD83D\uDD2E", "Memorama", "Memorama de Colores"),
+        GameItem("🎓", "Inglés", "English Fun")
     )
 
-    // Datos  para el menú lateral
+    // Datos para el menú lateral
+
     private val menuCategories = listOf(
         MenuCategory(
-            "🐾 Animales Divertidos",
+            "🐾 Animales Divertidos", // El emoji está solo en el string
             listOf(
                 MenuItemData("🐮", "Granja Mágica", "3-6 años")
             )
@@ -56,6 +57,12 @@ class MainActivity : AppCompatActivity() {
             )
         ),
         MenuCategory(
+            "🌍 Aprende Idiomas",
+            listOf(
+                MenuItemData("🎓", "English Fun", "4-10 años")
+            )
+        ),
+        MenuCategory(
             "🔢 Matemáticas Básicas",
             listOf(
                 MenuItemData("🐮", "Granja Animales", "3-6 años")
@@ -66,7 +73,8 @@ class MainActivity : AppCompatActivity() {
             listOf(
                 MenuItemData("🐮", "Granja Mágica", "3-6 años"),
                 MenuItemData("🎴", "Memorama", "4-8 años"),
-                MenuItemData("🔺", "Formas Divertidas", "3-5 años")
+                MenuItemData("🔺", "Formas Divertidas", "3-5 años"),
+                MenuItemData("🎓", "English Fun", "4-10 años")
             )
         )
     )
@@ -106,6 +114,9 @@ class MainActivity : AppCompatActivity() {
         introCircle = findViewById(R.id.introCircle)
         introSquare = findViewById(R.id.introSquare)
         introTriangle = findViewById(R.id.introTriangle)
+
+        //  Asegurar que el GridView muestre 2 columnas
+        gamesGrid.numColumns = 2
     }
 
     private fun setupBackPressedHandler() {
@@ -180,6 +191,26 @@ class MainActivity : AppCompatActivity() {
         }
 
         gamesGrid.adapter = adapter
+
+        // Ajustar altura cuando el layout esté listo
+        gamesGrid.post {
+            adjustGridViewHeight()
+        }
+    }
+
+    private fun adjustGridViewHeight() {
+        val numRows = Math.ceil(featuredGames.size / 2.0).toInt() // 2 columnas
+        val itemHeight = 120.dpToPx() // altura de cada item
+        val verticalSpacing = 15.dpToPx() // espacio entre filas
+        val padding = 40.dpToPx() // padding interno
+
+        // Calcular altura total
+        val totalHeight = (numRows * itemHeight) + ((numRows - 1) * verticalSpacing) + padding
+
+        // Aplicar altura al GridView
+        val params = gamesGrid.layoutParams
+        params.height = totalHeight
+        gamesGrid.layoutParams = params
     }
 
     private fun setupListeners() {
@@ -197,7 +228,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupNavigationMenuExact() {
-        // Crear el menú programáticamente
+        // Crear el menú
         createMenuProgrammatically()
     }
 
@@ -209,13 +240,21 @@ class MainActivity : AppCompatActivity() {
         menuCategories.forEachIndexed { categoryIndex, category ->
             // Añadir categoría
             val categoryView = layoutInflater.inflate(R.layout.menu_category, menuContainer, false)
-            categoryView.findViewById<TextView>(R.id.categoryIcon).text = category.title.substringBefore(" ")
-            categoryView.findViewById<TextView>(R.id.categoryTitle).text = category.title
+
+            //  Manejo correcto de emojis
+            val categoryIcon = categoryView.findViewById<TextView>(R.id.categoryIcon)
+            val categoryTitle = categoryView.findViewById<TextView>(R.id.categoryTitle)
+
+            // Extraer el emoji
+            val (emoji, titleWithoutEmoji) = extractEmojiAndTitle(category.title)
+
+            categoryIcon.text = emoji
+            categoryTitle.text = titleWithoutEmoji
             categoryView.contentDescription = "Categoría: ${category.title}"
 
             // Animación de bounce para la categoría
             val bounceAnim = AnimationUtils.loadAnimation(this, R.anim.bounce)
-            categoryView.findViewById<TextView>(R.id.categoryIcon).startAnimation(bounceAnim)
+            categoryIcon.startAnimation(bounceAnim)
 
             menuContainer.addView(categoryView)
 
@@ -229,7 +268,7 @@ class MainActivity : AppCompatActivity() {
                 itemView.findViewById<TextView>(R.id.itemAge).text = itemData.ageRange
                 itemView.contentDescription = "${itemData.title} - Para ${itemData.ageRange}"
 
-                // Configurar colores alternados programáticamente
+                // Configurar colores alternados
                 val backgroundDrawable = createMenuItemBackground(itemIndex)
                 itemView.findViewById<LinearLayout>(R.id.menuItemLayout).background = backgroundDrawable
 
@@ -257,6 +296,39 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //  Extrae  emojis (incluso los que son múltiples caracteres)
+    private fun extractEmojiAndTitle(fullText: String): Pair<String, String> {
+        // Si el texto empieza con espacio, quitarlo primero
+        val trimmedText = fullText.trim()
+
+        // Buscar el primer grupo de caracteres que no sean letras/números/espacios (probable emoji)
+        val emojiEndIndex = findEmojiEndIndex(trimmedText)
+
+        return if (emojiEndIndex > 0) {
+            val emoji = trimmedText.substring(0, emojiEndIndex)
+            val title = trimmedText.substring(emojiEndIndex).trim()
+            Pair(emoji, title)
+        } else {
+            // Si no se encuentra emoji, usar el primer carácter y el resto como título
+            Pair(trimmedText.take(1), trimmedText.drop(1).trim())
+        }
+    }
+
+    // Encuentra donde termina el emoji
+    private fun findEmojiEndIndex(text: String): Int {
+        if (text.isEmpty()) return 0
+
+        var index = 0
+        // Avanzar mientras encontremos caracteres que no sean letras, números o espacios
+        while (index < text.length) {
+            val char = text[index]
+            if (char.isLetterOrDigit() || char == ' ' || char == '\t') {
+                break
+            }
+            index++
+        }
+        return index
+    }
     private fun createMenuItemBackground(itemIndex: Int): GradientDrawable {
         return GradientDrawable().apply {
             cornerRadius = 15f
@@ -337,7 +409,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun startGame(gameName: String) {
         when (gameName) {
-            "Granja Mágica", "Contar Animales" -> {
+            "Granja Mágica", "Contar Animales", "Granja" -> {
                 // Iniciar el juego Contar Animales
                 val intent = Intent(this, ContarAnimales::class.java)
                 startActivity(intent)
@@ -352,6 +424,11 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this, ShapesGameActivity::class.java)
                 startActivity(intent)
             }
+            "English Fun", "Inglés" -> {
+                // Iniciar el juego English Fun
+                val intent = Intent(this, EnglishGameActivity::class.java)
+                startActivity(intent)
+            }
             else -> {
                 Toast.makeText(this, "🎮 Iniciando: $gameName", Toast.LENGTH_SHORT).show()
             }
@@ -359,8 +436,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startChallenge() {
-        // Reto del día aleatorio entre los tres juegos
-        val randomGame = listOf("Granja Mágica", "Memorama de Colores", "Formas Divertidas").random()
+        // Reto del día aleatorio entre los cuatro juegos
+        val randomGame = listOf("Granja Mágica", "Memorama de Colores", "Formas Divertidas", "English Fun").random()
 
         when (randomGame) {
             "Granja Mágica" -> {
@@ -381,6 +458,13 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "🏆 ¡Reto del Día!\nIdentifica 8 formas correctamente", Toast.LENGTH_LONG).show()
                 Handler(Looper.getMainLooper()).postDelayed({
                     val intent = Intent(this, ShapesGameActivity::class.java)
+                    startActivity(intent)
+                }, 2000)
+            }
+            "English Fun" -> {
+                Toast.makeText(this, "🏆 ¡Reto del Día!\nAprende 10 palabras en inglés", Toast.LENGTH_LONG).show()
+                Handler(Looper.getMainLooper()).postDelayed({
+                    val intent = Intent(this, EnglishGameActivity::class.java)
                     startActivity(intent)
                 }, 2000)
             }

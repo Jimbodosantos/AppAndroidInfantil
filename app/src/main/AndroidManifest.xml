@@ -46,6 +46,11 @@
             android:enableOnBackInvokedCallback="true"
             android:exported="true" />
 
+        <activity
+            android:name=".EnglishGameActivity"
+            android:enableOnBackInvokedCallback="true"
+            android:exported="true"
+             />
     </application>
 
 </manifest>

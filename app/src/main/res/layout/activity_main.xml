@@ -210,6 +210,7 @@
 
                 <!-- Juegos Destacados -->
                 <LinearLayout
+                    android:id="@+id/gamesSection"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -231,20 +232,21 @@
                         android:layout_gravity="center"
                         android:layout_marginBottom="20dp" />
 
+                    <!-- GridView con altura dinámica -->
                     <GridView
                         android:id="@+id/gamesGrid"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:numColumns="2"
-                        android:verticalSpacing="15dp"
-                        android:horizontalSpacing="15dp"
-                        android:stretchMode="columnWidth"
-                        android:gravity="center" />
+                    android:verticalSpacing="15dp"
+                    android:horizontalSpacing="15dp"
+                    android:stretchMode="columnWidth"
+                    android:gravity="center" />
 
                 </LinearLayout>
 
                 <!-- Botón Ver Más -->
                 <LinearLayout
+                    android:id="@+id/seeMoreSection"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -299,7 +301,6 @@
     </RelativeLayout>
 
     <!-- Menú lateral -->
-
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigationView"
         android:layout_width="300dp"
@@ -308,7 +309,6 @@
         android:background="@android:color/white"
         android:scrollbars="vertical"
         android:scrollbarStyle="outsideOverlay">
-
 
         <!-- LinearLayout principal que contiene header y contenido -->
         <LinearLayout
@@ -340,4 +340,4 @@
 
     </com.google.android.material.navigation.NavigationView>
 
-    </androidx.drawerlayout.widget.DrawerLayout>
+</androidx.drawerlayout.widget.DrawerLayout>
