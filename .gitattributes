@@ -1,0 +1,13 @@
+
+*.xml linguist-detectable=true
+*.xml linguist-language=XML
+
+
+app/src/main/res/** linguist-detectable=true
+app/src/main/res/** linguist-language=XML
+res/** linguist-detectable=true
+res/** linguist-language=XML
+
+
+*.xml linguist-generated=false
+*.xml linguist-vendored=false
