@@ -2,6 +2,7 @@ package com.example.sonrieaprende
 
 import android.animation.ObjectAnimator
 import android.graphics.Color
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -40,229 +41,234 @@ class EnglishGameActivity : AppCompatActivity() {
     private var isNightMode = false
     private var currentCategory = "animals"
 
+    // Variables para sonidos
+    private var backgroundMusic: MediaPlayer? = null
+    private var currentSound: MediaPlayer? = null
+    private val audioHandler = Handler(Looper.getMainLooper())
+    private var isSoundPlaying = false
+
     // Base de datos de vocabulario
     private val vocabulary = mapOf(
-
-            "animals" to listOf(
-                Word("perro", "Dog", "🐶"),
-                Word("gato", "Cat", "🐱"),
-                Word("pájaro", "Bird", "🐦"),
-                Word("pez", "Fish", "🐠"),
-                Word("conejo", "Rabbit", "🐰"),
-                Word("vaca", "Cow", "🐮"),
-                Word("cerdo", "Pig", "🐷"),
-                Word("oveja", "Sheep", "🐑"),
-                Word("caballo", "Horse", "🐴"),
-                Word("gallina", "Chicken", "🐔"),
-                Word("pato", "Duck", "🦆"),
-                Word("mariposa", "Butterfly", "🦋"),
-                Word("elefante", "Elephant", "🐘"),
-                Word("león", "Lion", "🦁"),
-                Word("tigre", "Tiger", "🐯"),
-                Word("jirafa", "Giraffe", "🦒"),
-                Word("mono", "Monkey", "🐵"),
-                Word("oso", "Bear", "🐻"),
-                Word("zorro", "Fox", "🦊"),
-                Word("lobo", "Wolf", "🐺")
-            ),
-    "colors" to listOf(
-    Word("rojo", "Red", "🔴"),
-    Word("azul", "Blue", "🔵"),
-    Word("verde", "Green", "🟢"),
-    Word("amarillo", "Yellow", "🟡"),
-    Word("naranja", "Orange", "🟠"),
-    Word("morado", "Purple", "🟣"),
-    Word("rosa", "Pink", "💗"),
-    Word("marrón", "Brown", "🟤"),
-    Word("negro", "Black", "⚫"),
-    Word("blanco", "White", "⚪"),
-    Word("gris", "Gray", "🔘"),
-    Word("dorado", "Gold", "🌟"),
-    Word("plateado", "Silver", "💿"),
-    Word("celeste", "Sky Blue", "🌤️"),
-    Word("violeta", "Violet", "🔮"),
-    Word("turquesa", "Turquoise", "🧊"),
-    Word("beige", "Beige", "🟫"),
-    Word("azul marino", "Navy Blue", "🌊"),
-    Word("verde lima", "Lime Green", "🍈"),
-    Word("rojo oscuro", "Dark Red", "🍎")
-    ),
-    "numbers" to listOf(
-    Word("uno", "One", "1️⃣"),
-    Word("dos", "Two", "2️⃣"),
-    Word("tres", "Three", "3️⃣"),
-    Word("cuatro", "Four", "4️⃣"),
-    Word("cinco", "Five", "5️⃣"),
-    Word("seis", "Six", "6️⃣"),
-    Word("siete", "Seven", "7️⃣"),
-    Word("ocho", "Eight", "8️⃣"),
-    Word("nueve", "Nine", "9️⃣"),
-    Word("diez", "Ten", "🔟"),
-    Word("once", "Eleven", "11"),
-    Word("doce", "Twelve", "12"),
-    Word("trece", "Thirteen", "13"),
-    Word("catorce", "Fourteen", "14"),
-    Word("quince", "Fifteen", "15"),
-    Word("veinte", "Twenty", "20"),
-    Word("cincuenta", "Fifty", "50"),
-    Word("cien", "One Hundred", "💯"),
-    Word("mil", "One Thousand", "1️⃣0️⃣0️⃣0️⃣"),
-    Word("millón", "One Million", "💰")
-    ),
-    "food" to listOf(
-    Word("manzana", "Apple", "🍎"),
-    Word("plátano", "Banana", "🍌"),
-    Word("naranja", "Orange", "🍊"),
-    Word("leche", "Milk", "🥛"),
-    Word("pan", "Bread", "🍞"),
-    Word("queso", "Cheese", "🧀"),
-    Word("agua", "Water", "💧"),
-    Word("jugo", "Juice", "🧃"),
-    Word("huevo", "Egg", "🥚"),
-    Word("arroz", "Rice", "🍚"),
-    Word("pollo", "Chicken", "🍗"),
-    Word("pescado", "Fish", "🐟"),
-    Word("carne", "Meat", "🥩"),
-    Word("ensalada", "Salad", "🥗"),
-    Word("sopa", "Soup", "🍲"),
-    Word("pizza", "Pizza", "🍕"),
-    Word("hamburguesa", "Hamburger", "🍔"),
-    Word("helado", "Ice Cream", "🍦"),
-    Word("pastel", "Cake", "🍰"),
-    Word("chocolate", "Chocolate", "🍫")
-    ),
-    "family" to listOf(
-    Word("mamá", "Mom", "👩"),
-    Word("papá", "Dad", "👨"),
-    Word("hermano", "Brother", "👦"),
-    Word("hermana", "Sister", "👧"),
-    Word("abuelo", "Grandpa", "👴"),
-    Word("abuela", "Grandma", "👵"),
-    Word("bebé", "Baby", "👶"),
-    Word("familia", "Family", "👪"),
-    Word("tío", "Uncle", "👨‍💼"),
-    Word("tía", "Aunt", "👩‍💼"),
-    Word("primo", "Cousin", "👦"),
-    Word("prima", "Cousin", "👧"),
-    Word("sobrino", "Nephew", "🧒"),
-    Word("sobrina", "Niece", "👧"),
-    Word("hijo", "Son", "👦"),
-    Word("hija", "Daughter", "👧"),
-    Word("esposo", "Husband", "👨"),
-    Word("esposa", "Wife", "👩"),
-    Word("padres", "Parents", "👨‍👩‍👧"),
-    Word("hermanos", "Siblings", "👨‍👧‍👦")
-    ),
-    "transport" to listOf(
-    Word("coche", "Car", "🚗"),
-    Word("autobús", "Bus", "🚌"),
-    Word("bicicleta", "Bicycle", "🚲"),
-    Word("tren", "Train", "🚆"),
-    Word("avión", "Airplane", "✈️"),
-    Word("barco", "Boat", "🚢"),
-    Word("motocicleta", "Motorcycle", "🏍️"),
-    Word("helicóptero", "Helicopter", "🚁"),
-    Word("camión", "Truck", "🚚"),
-    Word("taxi", "Taxi", "🚕"),
-    Word("ambulancia", "Ambulance", "🚑"),
-    Word("bomberos", "Fire Truck", "🚒"),
-    Word("policía", "Police Car", "🚓"),
-    Word("metro", "Subway", "🚇"),
-    Word("tranvía", "Tram", "🚊"),
-    Word("globo", "Balloon", "🎈"),
-    Word("cohete", "Rocket", "🚀"),
-    Word("submarino", "Submarine", "🛸"),
-    Word("yate", "Yacht", "⛵"),
-    Word("carreta", "Cart", "🛺")
-    ),
-    "school" to listOf(
-    Word("escuela", "School", "🏫"),
-    Word("maestro", "Teacher", "👨‍🏫"),
-    Word("estudiante", "Student", "👩‍🎓"),
-    Word("libro", "Book", "📚"),
-    Word("lápiz", "Pencil", "✏️"),
-    Word("bolígrafo", "Pen", "🖊️"),
-    Word("cuaderno", "Notebook", "📓"),
-    Word("mochila", "Backpack", "🎒"),
-    Word("pizarra", "Blackboard", "📋"),
-    Word("tijeras", "Scissors", "✂️"),
-    Word("goma", "Eraser", "🧼"),
-    Word("regla", "Ruler", "📏"),
-    Word("calculadora", "Calculator", "🧮"),
-    Word("computadora", "Computer", "💻"),
-    Word("papel", "Paper", "📄"),
-    Word("clase", "Class", "👨‍🏫"),
-    Word("examen", "Exam", "📝"),
-    Word("tarea", "Homework", "📖"),
-    Word("recreo", "Recess", "⚽"),
-    Word("biblioteca", "Library", "📚")
-    ),
-    "body" to listOf(
-    Word("cabeza", "Head", "👦"),
-    Word("mano", "Hand", "✋"),
-    Word("pie", "Foot", "🦶"),
-    Word("ojo", "Eye", "👁️"),
-    Word("nariz", "Nose", "👃"),
-    Word("boca", "Mouth", "👄"),
-    Word("oreja", "Ear", "👂"),
-    Word("brazo", "Arm", "💪"),
-    Word("pierna", "Leg", "🦵"),
-    Word("dedo", "Finger", "👆"),
-    Word("cabello", "Hair", "💇"),
-    Word("cara", "Face", "😀"),
-    Word("corazón", "Heart", "❤️"),
-    Word("estómago", "Stomach", "🩹"),
-    Word("espalda", "Back", "👤"),
-    Word("rodilla", "Knee", "🦵"),
-    Word("codo", "Elbow", "🦾"),
-    Word("hombro", "Shoulder", "💪"),
-    Word("cuello", "Neck", "👔"),
-    Word("diente", "Tooth", "🦷")
-    ),
-    "clothes" to listOf(
-    Word("camisa", "Shirt", "👕"),
-    Word("pantalón", "Pants", "👖"),
-    Word("vestido", "Dress", "👗"),
-    Word("zapatos", "Shoes", "👟"),
-    Word("sombrero", "Hat", "🧢"),
-    Word("chaqueta", "Jacket", "🧥"),
-    Word("calcetines", "Socks", "🧦"),
-    Word("falda", "Skirt", "👗"),
-    Word("suéter", "Sweater", "🥼"),
-    Word("bufanda", "Scarf", "🧣"),
-    Word("guantes", "Gloves", "🧤"),
-    Word("abrigo", "Coat", "🧥"),
-    Word("pijama", "Pajamas", "🛌"),
-    Word("traje", "Suit", "👔"),
-    Word("corbata", "Tie", "👔"),
-    Word("botas", "Boots", "👢"),
-    Word("sandalia", "Sandals", "👡"),
-    Word("gafas", "Glasses", "👓"),
-    Word("reloj", "Watch", "⌚"),
-    Word("bolso", "Bag", "👜")
-    ),
-    "house" to listOf(
-    Word("casa", "House", "🏠"),
-    Word("puerta", "Door", "🚪"),
-    Word("ventana", "Window", "🪟"),
-    Word("cocina", "Kitchen", "👨‍🍳"),
-    Word("baño", "Bathroom", "🚽"),
-    Word("dormitorio", "Bedroom", "🛏️"),
-    Word("sala", "Living Room", "🛋️"),
-    Word("mesa", "Table", "🪑"),
-    Word("silla", "Chair", "💺"),
-    Word("cama", "Bed", "🛏️"),
-    Word("sofá", "Sofa", "🛋️"),
-    Word("televisión", "Television", "📺"),
-    Word("refrigerador", "Refrigerator", "❄️"),
-    Word("estufa", "Stove", "🔥"),
-    Word("ducha", "Shower", "🚿"),
-    Word("espejo", "Mirror", "🪞"),
-    Word("lámpara", "Lamp", "💡"),
-    Word("pared", "Wall", "🧱"),
-    Word("techo", "Ceiling", "🏠"),
-    Word("piso", "Floor", "🟫")
-    )
+        "animals" to listOf(
+            Word("perro", "Dog", "🐶"),
+            Word("gato", "Cat", "🐱"),
+            Word("pájaro", "Bird", "🐦"),
+            Word("pez", "Fish", "🐠"),
+            Word("conejo", "Rabbit", "🐰"),
+            Word("vaca", "Cow", "🐮"),
+            Word("cerdo", "Pig", "🐷"),
+            Word("oveja", "Sheep", "🐑"),
+            Word("caballo", "Horse", "🐴"),
+            Word("gallina", "Chicken", "🐔"),
+            Word("pato", "Duck", "🦆"),
+            Word("mariposa", "Butterfly", "🦋"),
+            Word("elefante", "Elephant", "🐘"),
+            Word("león", "Lion", "🦁"),
+            Word("tigre", "Tiger", "🐯"),
+            Word("jirafa", "Giraffe", "🦒"),
+            Word("mono", "Monkey", "🐵"),
+            Word("oso", "Bear", "🐻"),
+            Word("zorro", "Fox", "🦊"),
+            Word("lobo", "Wolf", "🐺")
+        ),
+        "colors" to listOf(
+            Word("rojo", "Red", "🔴"),
+            Word("azul", "Blue", "🔵"),
+            Word("verde", "Green", "🟢"),
+            Word("amarillo", "Yellow", "🟡"),
+            Word("naranja", "Orange", "🟠"),
+            Word("morado", "Purple", "🟣"),
+            Word("rosa", "Pink", "💗"),
+            Word("marrón", "Brown", "🟤"),
+            Word("negro", "Black", "⚫"),
+            Word("blanco", "White", "⚪"),
+            Word("gris", "Gray", "🔘"),
+            Word("dorado", "Gold", "🌟"),
+            Word("plateado", "Silver", "💿"),
+            Word("celeste", "Sky Blue", "🌤️"),
+            Word("violeta", "Violet", "🔮"),
+            Word("turquesa", "Turquoise", "🧊"),
+            Word("beige", "Beige", "🟫"),
+            Word("azul marino", "Navy Blue", "🌊"),
+            Word("verde lima", "Lime Green", "🍈"),
+            Word("rojo oscuro", "Dark Red", "🍎")
+        ),
+        "numbers" to listOf(
+            Word("uno", "One", "1️⃣"),
+            Word("dos", "Two", "2️⃣"),
+            Word("tres", "Three", "3️⃣"),
+            Word("cuatro", "Four", "4️⃣"),
+            Word("cinco", "Five", "5️⃣"),
+            Word("seis", "Six", "6️⃣"),
+            Word("siete", "Seven", "7️⃣"),
+            Word("ocho", "Eight", "8️⃣"),
+            Word("nueve", "Nine", "9️⃣"),
+            Word("diez", "Ten", "🔟"),
+            Word("once", "Eleven", "11"),
+            Word("doce", "Twelve", "12"),
+            Word("trece", "Thirteen", "13"),
+            Word("catorce", "Fourteen", "14"),
+            Word("quince", "Fifteen", "15"),
+            Word("veinte", "Twenty", "20"),
+            Word("cincuenta", "Fifty", "50"),
+            Word("cien", "One Hundred", "💯"),
+            Word("mil", "One Thousand", "1️⃣0️⃣0️⃣0️⃣"),
+            Word("millón", "One Million", "💰")
+        ),
+        "food" to listOf(
+            Word("manzana", "Apple", "🍎"),
+            Word("plátano", "Banana", "🍌"),
+            Word("naranja", "Orange", "🍊"),
+            Word("leche", "Milk", "🥛"),
+            Word("pan", "Bread", "🍞"),
+            Word("queso", "Cheese", "🧀"),
+            Word("agua", "Water", "💧"),
+            Word("jugo", "Juice", "🧃"),
+            Word("huevo", "Egg", "🥚"),
+            Word("arroz", "Rice", "🍚"),
+            Word("pollo", "Chicken", "🍗"),
+            Word("pescado", "Fish", "🐟"),
+            Word("carne", "Meat", "🥩"),
+            Word("ensalada", "Salad", "🥗"),
+            Word("sopa", "Soup", "🍲"),
+            Word("pizza", "Pizza", "🍕"),
+            Word("hamburguesa", "Hamburger", "🍔"),
+            Word("helado", "Ice Cream", "🍦"),
+            Word("pastel", "Cake", "🍰"),
+            Word("chocolate", "Chocolate", "🍫")
+        ),
+        "family" to listOf(
+            Word("mamá", "Mom", "👩"),
+            Word("papá", "Dad", "👨"),
+            Word("hermano", "Brother", "👦"),
+            Word("hermana", "Sister", "👧"),
+            Word("abuelo", "Grandpa", "👴"),
+            Word("abuela", "Grandma", "👵"),
+            Word("bebé", "Baby", "👶"),
+            Word("familia", "Family", "👪"),
+            Word("tío", "Uncle", "👨‍💼"),
+            Word("tía", "Aunt", "👩‍💼"),
+            Word("primo", "Cousin", "👦"),
+            Word("prima", "Cousin", "👧"),
+            Word("sobrino", "Nephew", "🧒"),
+            Word("sobrina", "Niece", "👧"),
+            Word("hijo", "Son", "👦"),
+            Word("hija", "Daughter", "👧"),
+            Word("esposo", "Husband", "👨"),
+            Word("esposa", "Wife", "👩"),
+            Word("padres", "Parents", "👨‍👩‍👧"),
+            Word("hermanos", "Siblings", "👨‍👧‍👦")
+        ),
+        "transport" to listOf(
+            Word("coche", "Car", "🚗"),
+            Word("autobús", "Bus", "🚌"),
+            Word("bicicleta", "Bicycle", "🚲"),
+            Word("tren", "Train", "🚆"),
+            Word("avión", "Airplane", "✈️"),
+            Word("barco", "Boat", "🚢"),
+            Word("motocicleta", "Motorcycle", "🏍️"),
+            Word("helicóptero", "Helicopter", "🚁"),
+            Word("camión", "Truck", "🚚"),
+            Word("taxi", "Taxi", "🚕"),
+            Word("ambulancia", "Ambulance", "🚑"),
+            Word("bomberos", "Fire Truck", "🚒"),
+            Word("policía", "Police Car", "🚓"),
+            Word("metro", "Subway", "🚇"),
+            Word("tranvía", "Tram", "🚊"),
+            Word("globo", "Balloon", "🎈"),
+            Word("cohete", "Rocket", "🚀"),
+            Word("submarino", "Submarine", "🛸"),
+            Word("yate", "Yacht", "⛵"),
+            Word("carreta", "Cart", "🛺")
+        ),
+        "school" to listOf(
+            Word("escuela", "School", "🏫"),
+            Word("maestro", "Teacher", "👨‍🏫"),
+            Word("estudiante", "Student", "👩‍🎓"),
+            Word("libro", "Book", "📚"),
+            Word("lápiz", "Pencil", "✏️"),
+            Word("bolígrafo", "Pen", "🖊️"),
+            Word("cuaderno", "Notebook", "📓"),
+            Word("mochila", "Backpack", "🎒"),
+            Word("pizarra", "Blackboard", "📋"),
+            Word("tijeras", "Scissors", "✂️"),
+            Word("goma", "Eraser", "🧼"),
+            Word("regla", "Ruler", "📏"),
+            Word("calculadora", "Calculator", "🧮"),
+            Word("computadora", "Computer", "💻"),
+            Word("papel", "Paper", "📄"),
+            Word("clase", "Class", "👨‍🏫"),
+            Word("examen", "Exam", "📝"),
+            Word("tarea", "Homework", "📖"),
+            Word("recreo", "Recess", "⚽"),
+            Word("biblioteca", "Library", "📚")
+        ),
+        "body" to listOf(
+            Word("cabeza", "Head", "👦"),
+            Word("mano", "Hand", "✋"),
+            Word("pie", "Foot", "🦶"),
+            Word("ojo", "Eye", "👁️"),
+            Word("nariz", "Nose", "👃"),
+            Word("boca", "Mouth", "👄"),
+            Word("oreja", "Ear", "👂"),
+            Word("brazo", "Arm", "💪"),
+            Word("pierna", "Leg", "🦵"),
+            Word("dedo", "Finger", "👆"),
+            Word("cabello", "Hair", "💇"),
+            Word("cara", "Face", "😀"),
+            Word("corazón", "Heart", "❤️"),
+            Word("estómago", "Stomach", "🩹"),
+            Word("espalda", "Back", "👤"),
+            Word("rodilla", "Knee", "🦵"),
+            Word("codo", "Elbow", "🦾"),
+            Word("hombro", "Shoulder", "💪"),
+            Word("cuello", "Neck", "👔"),
+            Word("diente", "Tooth", "🦷")
+        ),
+        "clothes" to listOf(
+            Word("camisa", "Shirt", "👕"),
+            Word("pantalón", "Pants", "👖"),
+            Word("vestido", "Dress", "👗"),
+            Word("zapatos", "Shoes", "👟"),
+            Word("sombrero", "Hat", "🧢"),
+            Word("chaqueta", "Jacket", "🧥"),
+            Word("calcetines", "Socks", "🧦"),
+            Word("falda", "Skirt", "👗"),
+            Word("suéter", "Sweater", "🥼"),
+            Word("bufanda", "Scarf", "🧣"),
+            Word("guantes", "Gloves", "🧤"),
+            Word("abrigo", "Coat", "🧥"),
+            Word("pijama", "Pajamas", "🛌"),
+            Word("traje", "Suit", "👔"),
+            Word("corbata", "Tie", "👔"),
+            Word("botas", "Boots", "👢"),
+            Word("sandalia", "Sandals", "👡"),
+            Word("gafas", "Glasses", "👓"),
+            Word("reloj", "Watch", "⌚"),
+            Word("bolso", "Bag", "👜")
+        ),
+        "house" to listOf(
+            Word("casa", "House", "🏠"),
+            Word("puerta", "Door", "🚪"),
+            Word("ventana", "Window", "🪟"),
+            Word("cocina", "Kitchen", "👨‍🍳"),
+            Word("baño", "Bathroom", "🚽"),
+            Word("dormitorio", "Bedroom", "🛏️"),
+            Word("sala", "Living Room", "🛋️"),
+            Word("mesa", "Table", "🪑"),
+            Word("silla", "Chair", "💺"),
+            Word("cama", "Bed", "🛏️"),
+            Word("sofá", "Sofa", "🛋️"),
+            Word("televisión", "Television", "📺"),
+            Word("refrigerador", "Refrigerator", "❄️"),
+            Word("estufa", "Stove", "🔥"),
+            Word("ducha", "Shower", "🚿"),
+            Word("espejo", "Mirror", "🪞"),
+            Word("lámpara", "Lamp", "💡"),
+            Word("pared", "Wall", "🧱"),
+            Word("techo", "Ceiling", "🏠"),
+            Word("piso", "Floor", "🟫")
+        )
     )
 
     private val categoryNames = mapOf(
@@ -303,6 +309,7 @@ class EnglishGameActivity : AppCompatActivity() {
         "clothes" to "¡Aprende la ropa en inglés!",
         "house" to "¡Aprende las partes de la casa!"
     )
+
     data class Word(
         val spanish: String,
         val english: String,
@@ -315,8 +322,29 @@ class EnglishGameActivity : AppCompatActivity() {
 
         initViews()
         loadBestScore()
+        startBackgroundMusic()
         startGame()
         setupClickListeners()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Reanudar música de fondo si estaba pausada
+        backgroundMusic?.start()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // Pausar música de fondo cuando la app va a segundo plano
+        backgroundMusic?.pause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // Liberar recursos de audio
+        stopAllAudio()
+        backgroundMusic?.release()
+        audioHandler.removeCallbacksAndMessages(null)
     }
 
     private fun initViews() {
@@ -333,6 +361,47 @@ class EnglishGameActivity : AppCompatActivity() {
         nightModeBtn = findViewById(R.id.nightModeBtn)
         categoryBtn = findViewById(R.id.categoryBtn)
         mainContainer = findViewById(R.id.mainContainer)
+    }
+
+    private fun startBackgroundMusic() {
+        try {
+            backgroundMusic = MediaPlayer.create(this, R.raw.sonidoaprendeingles)
+            backgroundMusic?.isLooping = true
+            backgroundMusic?.setVolume(0.3f, 0.3f) // Volumen bajo para no molestar
+            backgroundMusic?.start()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun playSound(soundResource: Int) {
+        try {
+            // Detener sonido anterior si está reproduciéndose
+            currentSound?.release()
+
+            currentSound = MediaPlayer.create(this, soundResource)
+            currentSound?.setOnCompletionListener {
+                it.release()
+                currentSound = null
+                isSoundPlaying = false
+            }
+            currentSound?.start()
+            isSoundPlaying = true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            isSoundPlaying = false
+        }
+    }
+
+    private fun stopAllAudio() {
+        currentSound?.let {
+            if (it.isPlaying) {
+                it.stop()
+            }
+            it.release()
+            currentSound = null
+        }
+        isSoundPlaying = false
     }
 
     private fun loadBestScore() {
@@ -415,19 +484,22 @@ class EnglishGameActivity : AppCompatActivity() {
         )
 
         questionDisplayText.text = questionTypes.random()
-
     }
 
     private fun checkAnswer(selectedAnswer: String, cardView: CardView) {
+        stopAllAudio() // Detener cualquier sonido anterior
+
         if (selectedAnswer == currentCorrectAnswer) {
             // Respuesta correcta
             score += 10
+            playSound(R.raw.correct_sound) // Reproducir sonido correcto
             showCorrectAnimation(cardView)
             showCorrectModal()
             createConfettiEffect()
         } else {
             // Respuesta incorrecta
             lives--
+            playSound(R.raw.incorrect_sound) // Reproducir sonido incorrecto
             showIncorrectAnimation(cardView)
             showIncorrectModal()
         }
@@ -441,6 +513,7 @@ class EnglishGameActivity : AppCompatActivity() {
 
     private fun nextQuestion() {
         if (lives <= 0) {
+            playSound(R.raw.game_over_sound) // Reproducir sonido game over
             showGameOverDialog()
             return
         }
@@ -449,6 +522,7 @@ class EnglishGameActivity : AppCompatActivity() {
             currentQuestion++
             generateQuestion()
         } else {
+            playSound(R.raw.level_complete_sound) // Reproducir sonido nivel completado
             showRoundCompleteDialog()
         }
     }
@@ -570,7 +644,6 @@ class EnglishGameActivity : AppCompatActivity() {
                     7 -> selectCategory("body")
                     8 -> selectCategory("clothes")
                     9 -> selectCategory("house")
-
                 }
                 dialog.dismiss()
             }
@@ -586,7 +659,6 @@ class EnglishGameActivity : AppCompatActivity() {
         gameTitle.text = categoryTitles[category]
         gameSubtitle.text = categorySubtitles[category]
         resetGame()
-
     }
 
     private fun resetGame() {

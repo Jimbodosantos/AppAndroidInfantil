@@ -3,6 +3,7 @@ package com.example.sonrieaprende
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -26,8 +27,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var introCircle: ImageView
     private lateinit var introSquare: ImageView
     private lateinit var introTriangle: ImageView
+    private var backgroundMusic: MediaPlayer? = null
 
-    // Datos para los juegos destacados
     private val featuredGames = listOf(
         GameItem("🔺", "Formas", "Formas Divertidas"),
         GameItem("🐮", "Contar Animales", "Contar Animales"),
@@ -35,11 +36,9 @@ class MainActivity : AppCompatActivity() {
         GameItem("🎓", "Inglés", "English Fun")
     )
 
-    // Datos para el menú lateral
-
     private val menuCategories = listOf(
         MenuCategory(
-            "🐾 Animales Divertidos", // El emoji está solo en el string
+            "🐾 Animales Divertidos",
             listOf(
                 MenuItemData("🐮", "Granja Mágica", "3-6 años")
             )
@@ -83,26 +82,41 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Inicializar vistas
         initViews()
-
-        // Configurar el manejo del botón back
         setupBackPressedHandler()
-
-        // Configurar animaciones
         setupAnimations()
-
-        // Configurar GridView de juegos
         setupGamesGrid()
-
-        // Configurar listeners
         setupListeners()
-
-        // Configurar menú lateral
         setupNavigationMenuExact()
-
-        // Configurar animaciones del menú
         setupMenuAnimationsExact()
+        startBackgroundMusic()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        backgroundMusic?.start()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        backgroundMusic?.pause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        backgroundMusic?.release()
+        backgroundMusic = null
+    }
+
+    private fun startBackgroundMusic() {
+        try {
+            backgroundMusic = MediaPlayer.create(this, R.raw.sonidoprincipal)
+            backgroundMusic?.isLooping = true
+            backgroundMusic?.setVolume(0.3f, 0.3f)
+            backgroundMusic?.start()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun initViews() {
@@ -115,7 +129,6 @@ class MainActivity : AppCompatActivity() {
         introSquare = findViewById(R.id.introSquare)
         introTriangle = findViewById(R.id.introTriangle)
 
-        //  Asegurar que el GridView muestre 2 columnas
         gamesGrid.numColumns = 2
     }
 
@@ -150,7 +163,6 @@ class MainActivity : AppCompatActivity() {
     private fun setupMenuAnimationsExact() {
         val floatAnimation = AnimationUtils.loadAnimation(this, R.anim.floatt)
 
-        // Animación para las formas del header del menú
         findViewById<View>(R.id.headerShape1)?.startAnimation(floatAnimation)
         Handler(Looper.getMainLooper()).postDelayed({
             findViewById<View>(R.id.headerShape2)?.startAnimation(floatAnimation)
@@ -176,7 +188,6 @@ class MainActivity : AppCompatActivity() {
                 gameIcon.text = gameItem.icon
                 gameName.text = gameItem.name
 
-                // Animación flotante para los íconos
                 val iconAnimation = AnimationUtils.loadAnimation(this@MainActivity, R.anim.floatt)
                 iconAnimation.startOffset = position * 200L
                 gameIcon.startAnimation(iconAnimation)
@@ -192,22 +203,19 @@ class MainActivity : AppCompatActivity() {
 
         gamesGrid.adapter = adapter
 
-        // Ajustar altura cuando el layout esté listo
         gamesGrid.post {
             adjustGridViewHeight()
         }
     }
 
     private fun adjustGridViewHeight() {
-        val numRows = Math.ceil(featuredGames.size / 2.0).toInt() // 2 columnas
-        val itemHeight = 120.dpToPx() // altura de cada item
-        val verticalSpacing = 15.dpToPx() // espacio entre filas
-        val padding = 40.dpToPx() // padding interno
+        val numRows = Math.ceil(featuredGames.size / 2.0).toInt()
+        val itemHeight = 120.dpToPx()
+        val verticalSpacing = 15.dpToPx()
+        val padding = 40.dpToPx()
 
-        // Calcular altura total
         val totalHeight = (numRows * itemHeight) + ((numRows - 1) * verticalSpacing) + padding
 
-        // Aplicar altura al GridView
         val params = gamesGrid.layoutParams
         params.height = totalHeight
         gamesGrid.layoutParams = params
@@ -228,7 +236,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupNavigationMenuExact() {
-        // Crear el menú
         createMenuProgrammatically()
     }
 
@@ -236,43 +243,34 @@ class MainActivity : AppCompatActivity() {
         val menuContainer = findViewById<LinearLayout>(R.id.menuContentContainer)
         menuContainer?.removeAllViews()
 
-        // Crear cada categoría con sus items
         menuCategories.forEachIndexed { categoryIndex, category ->
-            // Añadir categoría
             val categoryView = layoutInflater.inflate(R.layout.menu_category, menuContainer, false)
 
-            //  Manejo correcto de emojis
             val categoryIcon = categoryView.findViewById<TextView>(R.id.categoryIcon)
             val categoryTitle = categoryView.findViewById<TextView>(R.id.categoryTitle)
 
-            // Extraer el emoji
             val (emoji, titleWithoutEmoji) = extractEmojiAndTitle(category.title)
 
             categoryIcon.text = emoji
             categoryTitle.text = titleWithoutEmoji
             categoryView.contentDescription = "Categoría: ${category.title}"
 
-            // Animación de bounce para la categoría
             val bounceAnim = AnimationUtils.loadAnimation(this, R.anim.bounce)
             categoryIcon.startAnimation(bounceAnim)
 
             menuContainer.addView(categoryView)
 
-            // Añadir items de esta categoría
             category.items.forEachIndexed { itemIndex, itemData ->
                 val itemView = layoutInflater.inflate(R.layout.menu_item, menuContainer, false)
 
-                // Configurar datos del item
                 itemView.findViewById<TextView>(R.id.itemIcon).text = itemData.icon
                 itemView.findViewById<TextView>(R.id.itemTitle).text = itemData.title
                 itemView.findViewById<TextView>(R.id.itemAge).text = itemData.ageRange
                 itemView.contentDescription = "${itemData.title} - Para ${itemData.ageRange}"
 
-                // Configurar colores alternados
                 val backgroundDrawable = createMenuItemBackground(itemIndex)
                 itemView.findViewById<LinearLayout>(R.id.menuItemLayout).background = backgroundDrawable
 
-                // Configurar animaciones y clics
                 setupMenuItemAnimations(itemView, itemData, categoryIndex * 10 + itemIndex)
 
                 itemView.setOnClickListener {
@@ -283,12 +281,11 @@ class MainActivity : AppCompatActivity() {
                 menuContainer.addView(itemView)
             }
 
-            // Añadir espacio entre categorías
             if (categoryIndex < menuCategories.size - 1) {
                 val space = View(this)
                 space.layoutParams = LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
-                    20.dpToPx() // 20dp de espacio
+                    20.dpToPx()
                 )
                 space.contentDescription = "Espacio entre categorías"
                 menuContainer.addView(space)
@@ -296,12 +293,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    //  Extrae  emojis (incluso los que son múltiples caracteres)
     private fun extractEmojiAndTitle(fullText: String): Pair<String, String> {
-        // Si el texto empieza con espacio, quitarlo primero
         val trimmedText = fullText.trim()
-
-        // Buscar el primer grupo de caracteres que no sean letras/números/espacios (probable emoji)
         val emojiEndIndex = findEmojiEndIndex(trimmedText)
 
         return if (emojiEndIndex > 0) {
@@ -309,17 +302,14 @@ class MainActivity : AppCompatActivity() {
             val title = trimmedText.substring(emojiEndIndex).trim()
             Pair(emoji, title)
         } else {
-            // Si no se encuentra emoji, usar el primer carácter y el resto como título
             Pair(trimmedText.take(1), trimmedText.drop(1).trim())
         }
     }
 
-    // Encuentra donde termina el emoji
     private fun findEmojiEndIndex(text: String): Int {
         if (text.isEmpty()) return 0
 
         var index = 0
-        // Avanzar mientras encontremos caracteres que no sean letras, números o espacios
         while (index < text.length) {
             val char = text[index]
             if (char.isLetterOrDigit() || char == ' ' || char == '\t') {
@@ -329,19 +319,17 @@ class MainActivity : AppCompatActivity() {
         }
         return index
     }
+
     private fun createMenuItemBackground(itemIndex: Int): GradientDrawable {
         return GradientDrawable().apply {
             cornerRadius = 15f
             if (itemIndex % 3 == 0) {
-                // Color rosa para items
                 setColor(Color.parseColor("#FFF0F5"))
                 setStroke(2.dpToPx(), Color.parseColor("#FFB6C1"))
             } else if (itemIndex % 3 == 1) {
-                // Color verde para items
                 setColor(Color.parseColor("#F0FFF0"))
                 setStroke(2.dpToPx(), Color.parseColor("#98FB98"))
             } else {
-                // Color azul claro para items
                 setColor(Color.parseColor("#F0F8FF"))
                 setStroke(2.dpToPx(), Color.parseColor("#87CEEB"))
             }
@@ -349,13 +337,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupMenuItemAnimations(view: View, itemData: MenuItemData, index: Int) {
-        // Animación flotante para íconos
         val icon = view.findViewById<TextView>(R.id.itemIcon)
         val floatAnim = AnimationUtils.loadAnimation(this, R.anim.icon_float)
         floatAnim.startOffset = (index % 4) * 300L
         icon.startAnimation(floatAnim)
 
-        // Efecto hover
         view.setOnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
@@ -410,22 +396,18 @@ class MainActivity : AppCompatActivity() {
     private fun startGame(gameName: String) {
         when (gameName) {
             "Granja Mágica", "Contar Animales", "Granja" -> {
-                // Iniciar el juego Contar Animales
                 val intent = Intent(this, ContarAnimales::class.java)
                 startActivity(intent)
             }
             "Memorama de Colores", "Memorama" -> {
-                // Iniciar el juego Memorama de Colores
                 val intent = Intent(this, MemoramaColores::class.java)
                 startActivity(intent)
             }
             "Formas Divertidas", "Formas" -> {
-                // Iniciar el juego Formas Divertidas
                 val intent = Intent(this, ShapesGameActivity::class.java)
                 startActivity(intent)
             }
             "English Fun", "Inglés" -> {
-                // Iniciar el juego English Fun
                 val intent = Intent(this, EnglishGameActivity::class.java)
                 startActivity(intent)
             }
@@ -436,7 +418,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startChallenge() {
-        // Reto del día aleatorio entre los cuatro juegos
         val randomGame = listOf("Granja Mágica", "Memorama de Colores", "Formas Divertidas", "English Fun").random()
 
         when (randomGame) {
@@ -471,7 +452,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // Data classes
     data class GameItem(
         val icon: String,
         val name: String,
@@ -490,6 +470,5 @@ class MainActivity : AppCompatActivity() {
         val items: List<MenuItemData>
     )
 
-    // Extensión para convertir dp a px
     private fun Int.dpToPx(): Int = (this * resources.displayMetrics.density).toInt()
 }
