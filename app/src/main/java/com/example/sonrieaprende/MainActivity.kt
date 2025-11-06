@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
         GameItem("🔺", "Formas", "Formas Divertidas"),
         GameItem("🐮", "Contar Animales", "Contar Animales"),
         GameItem("\uD83D\uDD2E", "Memorama", "Memorama de Colores"),
+        GameItem("🎨", "Art Attack", "Art Attack"),
         GameItem("🎓", "Inglés", "English Fun")
     )
 
@@ -56,6 +57,12 @@ class MainActivity : AppCompatActivity() {
             )
         ),
         MenuCategory(
+            "🎨 Juegos Creativos", // NUEVA CATEGORÍA
+            listOf(
+                MenuItemData("🎨", "Art Attack", "3-8 años")
+            )
+        ),
+        MenuCategory(
             "🌍 Aprende Idiomas",
             listOf(
                 MenuItemData("🎓", "English Fun", "4-10 años")
@@ -73,6 +80,7 @@ class MainActivity : AppCompatActivity() {
                 MenuItemData("🐮", "Granja Mágica", "3-6 años"),
                 MenuItemData("🎴", "Memorama", "4-8 años"),
                 MenuItemData("🔺", "Formas Divertidas", "3-5 años"),
+                MenuItemData("🎨", "Art Attack", "3-8 años"),
                 MenuItemData("🎓", "English Fun", "4-10 años")
             )
         )
@@ -188,9 +196,15 @@ class MainActivity : AppCompatActivity() {
                 gameIcon.text = gameItem.icon
                 gameName.text = gameItem.name
 
-                val iconAnimation = AnimationUtils.loadAnimation(this@MainActivity, R.anim.floatt)
-                iconAnimation.startOffset = position * 200L
-                gameIcon.startAnimation(iconAnimation)
+
+                if (gameItem.name == "Art Attack") {
+                    val rainbowAnimation = AnimationUtils.loadAnimation(this@MainActivity, R.anim.bounce)
+                    gameIcon.startAnimation(rainbowAnimation)
+                } else {
+                    val iconAnimation = AnimationUtils.loadAnimation(this@MainActivity, R.anim.floatt)
+                    iconAnimation.startOffset = position * 200L
+                    gameIcon.startAnimation(iconAnimation)
+                }
 
                 view.setOnClickListener {
                     startGame(gameItem.fullName)
@@ -255,8 +269,14 @@ class MainActivity : AppCompatActivity() {
             categoryTitle.text = titleWithoutEmoji
             categoryView.contentDescription = "Categoría: ${category.title}"
 
-            val bounceAnim = AnimationUtils.loadAnimation(this, R.anim.bounce)
-            categoryIcon.startAnimation(bounceAnim)
+
+            if (category.title.contains("Creativos")) {
+                val rainbowAnim = AnimationUtils.loadAnimation(this, R.anim.bounce)
+                categoryIcon.startAnimation(rainbowAnim)
+            } else {
+                val bounceAnim = AnimationUtils.loadAnimation(this, R.anim.bounce)
+                categoryIcon.startAnimation(bounceAnim)
+            }
 
             menuContainer.addView(categoryView)
 
@@ -268,7 +288,12 @@ class MainActivity : AppCompatActivity() {
                 itemView.findViewById<TextView>(R.id.itemAge).text = itemData.ageRange
                 itemView.contentDescription = "${itemData.title} - Para ${itemData.ageRange}"
 
-                val backgroundDrawable = createMenuItemBackground(itemIndex)
+
+                val backgroundDrawable = if (itemData.title == "Art Attack") {
+                    createArtAttackBackground()
+                } else {
+                    createMenuItemBackground(itemIndex)
+                }
                 itemView.findViewById<LinearLayout>(R.id.menuItemLayout).background = backgroundDrawable
 
                 setupMenuItemAnimations(itemView, itemData, categoryIndex * 10 + itemIndex)
@@ -290,6 +315,14 @@ class MainActivity : AppCompatActivity() {
                 space.contentDescription = "Espacio entre categorías"
                 menuContainer.addView(space)
             }
+        }
+    }
+
+    private fun createArtAttackBackground(): GradientDrawable {
+        return GradientDrawable().apply {
+            cornerRadius = 15f
+            setColor(Color.parseColor("#FFF0F5"))
+            setStroke(2.dpToPx(), Color.parseColor("#FFB6C1"))
         }
     }
 
@@ -338,9 +371,17 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupMenuItemAnimations(view: View, itemData: MenuItemData, index: Int) {
         val icon = view.findViewById<TextView>(R.id.itemIcon)
-        val floatAnim = AnimationUtils.loadAnimation(this, R.anim.icon_float)
-        floatAnim.startOffset = (index % 4) * 300L
-        icon.startAnimation(floatAnim)
+
+
+        if (itemData.title == "Art Attack") {
+            val rainbowAnim = AnimationUtils.loadAnimation(this, R.anim.bounce)
+            rainbowAnim.startOffset = (index % 4) * 300L
+            icon.startAnimation(rainbowAnim)
+        } else {
+            val floatAnim = AnimationUtils.loadAnimation(this, R.anim.icon_float)
+            floatAnim.startOffset = (index % 4) * 300L
+            icon.startAnimation(floatAnim)
+        }
 
         view.setOnTouchListener { v, event ->
             when (event.action) {
@@ -411,6 +452,10 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this, EnglishGameActivity::class.java)
                 startActivity(intent)
             }
+            "Art Attack" -> {
+                val intent = Intent(this, ArtAttackActivity::class.java)
+                startActivity(intent)
+            }
             else -> {
                 Toast.makeText(this, "🎮 Iniciando: $gameName", Toast.LENGTH_SHORT).show()
             }
@@ -418,7 +463,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startChallenge() {
-        val randomGame = listOf("Granja Mágica", "Memorama de Colores", "Formas Divertidas", "English Fun").random()
+        val randomGame = listOf("Granja Mágica", "Memorama de Colores", "Formas Divertidas", "English Fun", "Art Attack").random()
 
         when (randomGame) {
             "Granja Mágica" -> {
@@ -446,6 +491,13 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "🏆 ¡Reto del Día!\nAprende 10 palabras en inglés", Toast.LENGTH_LONG).show()
                 Handler(Looper.getMainLooper()).postDelayed({
                     val intent = Intent(this, EnglishGameActivity::class.java)
+                    startActivity(intent)
+                }, 2000)
+            }
+            "Art Attack" -> {
+                Toast.makeText(this, "🏆 ¡Reto del Día!\nCrea 3 dibujos coloridos", Toast.LENGTH_LONG).show()
+                Handler(Looper.getMainLooper()).postDelayed({
+                    val intent = Intent(this, ArtAttackActivity::class.java)
                     startActivity(intent)
                 }, 2000)
             }

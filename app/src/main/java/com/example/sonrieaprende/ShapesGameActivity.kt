@@ -233,7 +233,7 @@ class ShapesGameActivity : AppCompatActivity() {
     private fun getFindSound(shapeName: String): Int {
         return when (shapeName) {
             "círculo" -> R.raw.encuentralaformacirculo
-            "cuadrado" -> R.raw.encuentralaformacuadrado
+            "cuadrado" -> R.raw.fan1
             "espiral" -> R.raw.encuentralaformaespiral
             "octágono" -> R.raw.encuentralaformaoctagono
             else -> 0
