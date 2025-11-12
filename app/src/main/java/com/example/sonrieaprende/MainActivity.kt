@@ -34,14 +34,14 @@ class MainActivity : AppCompatActivity() {
         GameItem("🐮", "Contar Animales", "Contar Animales"),
         GameItem("\uD83D\uDD2E", "Memorama", "Memorama de Colores"),
         GameItem("🎨", "Art Attack", "Art Attack"),
-        GameItem("🎓", "Inglés", "English Fun")
+        GameItem("🎓", "English Fun", "English Fun"),
+        GameItem("🔤", "Letras Locas", "Letras Locas")
     )
-
     private val menuCategories = listOf(
         MenuCategory(
             "🐾 Animales Divertidos",
             listOf(
-                MenuItemData("🐮", "Granja Mágica", "3-6 años")
+                MenuItemData("🐮", "Contar Animales", "3-6 años")
             )
         ),
         MenuCategory(
@@ -53,11 +53,12 @@ class MainActivity : AppCompatActivity() {
         MenuCategory(
             "🔺 Formas y Colores",
             listOf(
-                MenuItemData("🔺", "Formas Divertidas", "3-5 años")
+                MenuItemData("🔺", "Formas Divertidas", "3-5 años"),
+                MenuItemData("🔤", "Letras Locas", "3-6 años")
             )
         ),
         MenuCategory(
-            "🎨 Juegos Creativos", // NUEVA CATEGORÍA
+            "🎨 Juegos Creativos",
             listOf(
                 MenuItemData("🎨", "Art Attack", "3-8 años")
             )
@@ -71,17 +72,18 @@ class MainActivity : AppCompatActivity() {
         MenuCategory(
             "🔢 Matemáticas Básicas",
             listOf(
-                MenuItemData("🐮", "Granja Animales", "3-6 años")
+                MenuItemData("🐮", "Contar Animales", "3-6 años")
             )
         ),
         MenuCategory(
             "🎮 Juegos Destacados",
             listOf(
-                MenuItemData("🐮", "Granja Mágica", "3-6 años"),
+                MenuItemData("🐮", "Contar Animales", "3-6 años"),
                 MenuItemData("🎴", "Memorama", "4-8 años"),
                 MenuItemData("🔺", "Formas Divertidas", "3-5 años"),
                 MenuItemData("🎨", "Art Attack", "3-8 años"),
-                MenuItemData("🎓", "English Fun", "4-10 años")
+                MenuItemData("🎓", "English Fun", "4-10 años"),
+                MenuItemData("🔤", "Letras Locas", "3-6 años")
             )
         )
     )
@@ -456,14 +458,17 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this, ArtAttackActivity::class.java)
                 startActivity(intent)
             }
+            "Letras Locas", "Letras" -> {
+                val intent = Intent(this, LetrasLocasActivity::class.java)
+                startActivity(intent)
+            }
             else -> {
                 Toast.makeText(this, "🎮 Iniciando: $gameName", Toast.LENGTH_SHORT).show()
             }
         }
     }
-
     private fun startChallenge() {
-        val randomGame = listOf("Granja Mágica", "Memorama de Colores", "Formas Divertidas", "English Fun", "Art Attack").random()
+        val randomGame = listOf("Granja Mágica", "Memorama de Colores", "Formas Divertidas", "English Fun", "Art Attack", "Letras Locas").random()
 
         when (randomGame) {
             "Granja Mágica" -> {
@@ -498,6 +503,13 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "🏆 ¡Reto del Día!\nCrea 3 dibujos coloridos", Toast.LENGTH_LONG).show()
                 Handler(Looper.getMainLooper()).postDelayed({
                     val intent = Intent(this, ArtAttackActivity::class.java)
+                    startActivity(intent)
+                }, 2000)
+            }
+            "Letras Locas" -> {
+                Toast.makeText(this, "🏆 ¡Reto del Día!\nIdentifica 10 letras correctamente", Toast.LENGTH_LONG).show()
+                Handler(Looper.getMainLooper()).postDelayed({
+                    val intent = Intent(this, LetrasLocasActivity::class.java)
                     startActivity(intent)
                 }, 2000)
             }

@@ -61,12 +61,18 @@
              />
 
         <activity
+            android:name=".LetrasLocasActivity"
+            android:enableOnBackInvokedCallback="true"
+            android:exported="true"
+            />
+
+        <activity
             android:name=".ArtAttackActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.SonrieAprende" />
 
-        <!-- Provider para compartir archivos (necesario para guardar imágenes) -->
+        <!-- Provider para compartir archivos (para guardar imágenes) -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
